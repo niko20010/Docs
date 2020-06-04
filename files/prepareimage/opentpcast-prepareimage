@@ -64,30 +64,31 @@ sudo update-rc.d opentpcast-initwlan defaults > /dev/null 2>&1 || true
 # Upgrade WLAN driver
 logger "Installing WLAN driver and firmware for rtl8192du"
 echo "Installing WLAN driver and firmware for rtl8192du"
-git clone https://github.com/OpenTPCast/rtl8192du.git rtl8192du
+git clone https://github.com/niko20010/rtl8192du.git rtl8192du
 sudo ln -s /usr/src/linux-headers-$(ls -1 /lib/modules | tail -1)/arch/arm /usr/src/linux-headers-$(ls -1 /lib/modules | tail -1)/arch/armv7l > /dev/null 2>&1 || true
 sudo make KVER=$(ls -1 /lib/modules | tail -1) -C ./rtl8192du
 sudo cp rtl8192du/8192du.ko /lib/modules/$(ls -1 /lib/modules | tail -1)/kernel/drivers/net/wireless
-sudo rm -rf rtl8192du
+#sudo rm -rf rtl8192du
 sudo echo "options 8192du rtw_power_mgnt=0 rtw_enusbss=0" | sudo tee -a /etc/modprobe.d/8192du.conf > /dev/null
 sudo depmod -a $(ls -1 /lib/modules | tail -1) > /dev/null 2>&1 || true
 
 logger "Installing WLAN driver and firmware for rtl8812au"
 echo "Installing WLAN driver and firmware for rtl8812au"
-git clone https://github.com/OpenTPCast/rtl8812au.git rtl8812au
+git clone https://github.com/niko_20010/rtl8812au.git rtl8812au
 sudo ln -s /usr/src/linux-headers-$(ls -1 /lib/modules | tail -1)/arch/arm /usr/src/linux-headers-$(ls -1 /lib/modules | tail -1)/arch/armv7l > /dev/null 2>&1 || true
 sudo make KVER=$(ls -1 /lib/modules | tail -1) -C ./rtl8812au
 sudo cp rtl8812au/8812au.ko /lib/modules/$(ls -1 /lib/modules | tail -1)/kernel/drivers/net/wireless
-sudo rm -rf rtl8812au
+#sudo rm -rf rtl8812au
 sudo echo "options 8812au rtw_power_mgnt=0 rtw_enusbss=0" | sudo tee -a /etc/modprobe.d/8812au.conf > /dev/null
 sudo depmod -a $(ls -1 /lib/modules | tail -1) > /dev/null 2>&1 || true
 
 # Install VirtualHere USB Server (Server licence must be purchased from https://www.virtualhere.com/tpcast_purchase to use)
 logger "Installing VirtualHere USB Server"
 sudo wget -e check_certificate=off -q -O /usr/sbin/vhusbdtpcast https://www.virtualhere.com/sites/default/files/usbserver/vhusbdtpcast && sudo chmod +x /usr/sbin/vhusbdtpcast
-sudo wget -e check_certificate=off -q -O /etc/init.d/vhusbdpin https://www.virtualhere.com/sites/default/files/usbserver/scripts/vhusbdpin && sudo chmod +x /etc/init.d/vhusbdpin
-sudo sed -i 's/vhusbdarm/vhusbdtpcast/g' /etc/init.d/vhusbdpin
-sudo update-rc.d vhusbdpin defaults > /dev/null 2>&1 || true
+sudo wget -e check_certificate=off -q -O /etc/systemd/system/virtualhere.service https://rawgit.com/OpenTPCast/Docs/master/files/prepareimage/virtualhere.service
+#sudo wget -e check_certificate=off -q -O /etc/init.d/vhusbdpin https://www.virtualhere.com/sites/default/files/usbserver/scripts/vhusbdpin && sudo chmod +x /etc/init.d/vhusbdpin
+#sudo sed -i 's/vhusbdarm/vhusbdtpcast/g' /etc/init.d/vhusbdpin
+#sudo update-rc.d vhusbdpin defaults > /dev/null 2>&1 || true
 
 # Configure VirtualHere USB Server for TPCast devices
 # HMD camera has custom event handler onReset.$VENDOR_ID$.$PRODUCT_ID$=
