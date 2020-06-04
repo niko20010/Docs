@@ -1,0 +1,10 @@
+[Unit]
+Description=VirtualHere USB Sharing
+Requires=networking.service
+After=networking.service
+[Service]
+ExecStartPre=/bin/sh -c 'logger VirtualHere settling...;sleep 1s;logger VirtualHere settled'
+ExecStart=/usr/sbin/vhusbdtpcast
+Type=idle
+[Install]
+WantedBy=multi-user.target
